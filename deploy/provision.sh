@@ -88,7 +88,7 @@ run_remote "
         echo 'Repository already exists, pulling latest changes...'
         sudo -u deploy bash -c 'cd /var/www/mataroa && git pull'
     else
-        sudo -u deploy git clone https://github.com/mataroablog/mataroa /var/www/mataroa
+        sudo -u deploy git clone https://github.com/f-lefebvre/mataroa /var/www/mataroa
     fi
 "
 
