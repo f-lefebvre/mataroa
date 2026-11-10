@@ -40,7 +40,7 @@ SYSTEMD_FILES="${SCRIPT_DIR}/generated"
 
 # Function to run commands on remote server
 run_remote() {
-    ssh -o StrictHostKeyChecking=no "${SERVER_USER}@${SERVER_IP}" "$@"
+    ssh cohorte-vps "$@"
 }
 
 # 1. Install essential packages
