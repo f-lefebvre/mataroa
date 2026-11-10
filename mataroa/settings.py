@@ -41,8 +41,10 @@ ALLOWED_HOSTS = [
 ADMINS = [os.getenv("ADMIN_EMAIL")] if os.getenv("ADMIN_EMAIL") else []
 
 CANONICAL_HOST = os.getenv("DOMAIN", "mataroa.blog")
-if LOCALDEV:
-    CANONICAL_HOST = "mataroalocal.blog:8000"
+
+# Commented to disable LOCALDEV redirection
+#if LOCALDEV && FALSE:
+    #CANONICAL_HOST = "mataroalocal.blog:8000"
 
 CUSTOM_DOMAIN_IP = os.getenv("CUSTOM_DOMAIN_IP")
 
