@@ -14,9 +14,9 @@ fi
 
 echo "==> Setting up rclone configuration..."
 
-mkdir -p /home/deploy/.config/rclone
+sudo mkdir -p /home/deploy/.config/rclone
 
-cat > /home/deploy/.config/rclone/rclone.conf <<EOF
+sudo tee /home/deploy/.config/rclone/rclone.conf > /dev/null <<EOF
 [offsite-backup]
 type = s3
 provider = ${RCLONE_PROVIDER}
@@ -28,7 +28,7 @@ acl = private
 storage_class = STANDARD
 EOF
 
-chown -R deploy:deploy /home/deploy/.config
-chmod 600 /home/deploy/.config/rclone/rclone.conf
+sudo chown -R deploy:deploy /home/deploy/.config
+sudo chmod 600 /home/deploy/.config/rclone/rclone.conf
 
 echo "==> rclone configuration created successfully"

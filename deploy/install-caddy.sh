@@ -17,16 +17,18 @@ fi
 
 # Add Caddy GPG key
 echo "Adding Caddy GPG key..."
-curl -fsSL https://dl.cloudsmith.io/public/caddy/stable/gpg.key | gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/caddy-stable.gpg
+curl -fsSL https://dl.cloudsmith.io/public/caddy/stable/gpg.key | sudo gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/caddy-stable.gpg
 
 # Add Caddy repositories
 echo "Adding Caddy repositories..."
-echo "deb [signed-by=/etc/apt/trusted.gpg.d/caddy-stable.gpg] https://dl.cloudsmith.io/public/caddy/stable/deb/debian any-version main" > /etc/apt/sources.list.d/caddy-stable.list
-echo "deb-src [signed-by=/etc/apt/trusted.gpg.d/caddy-stable.gpg] https://dl.cloudsmith.io/public/caddy/stable/deb/debian any-version main" >> /etc/apt/sources.list.d/caddy-stable.list
+{
+  echo "deb [signed-by=/etc/apt/trusted.gpg.d/caddy-stable.gpg] https://dl.cloudsmith.io/public/caddy/stable/deb/debian any-version main"
+  echo "deb-src [signed-by=/etc/apt/trusted.gpg.d/caddy-stable.gpg] https://dl.cloudsmith.io/public/caddy/stable/deb/debian any-version main"
+} | sudo tee /etc/apt/sources.list.d/caddy-stable.list > /dev/null
 
 # Update package list and install Caddy
 echo "Installing Caddy..."
-apt-get update
-apt-get install -y caddy
+sudo apt-get update
+sudo apt-get install -y caddy
 
 echo "==> Caddy installation completed successfully!"

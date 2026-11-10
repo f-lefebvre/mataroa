@@ -45,7 +45,7 @@ run_remote() {
 
 # 1. Install essential packages
 echo "==> Installing essential packages..."
-run_remote "apt update && apt install -y gcc git rclone vim postgresql postgresql-contrib curl gettext-base btop"
+run_remote "sudo apt update && sudo apt install -y gcc git rclone vim postgresql postgresql-contrib curl gettext-base btop gpg"
 
 # 2. Install Caddy
 echo "==> Installing Caddy..."
@@ -55,10 +55,10 @@ run_remote "bash -s" < "${SCRIPT_DIR}/install-caddy.sh"
 echo "==> Creating deploy user..."
 run_remote "
     if ! id -u deploy &>/dev/null; then
-        useradd -m -s /bin/bash -G sudo,www-data deploy
+        sudo useradd -m -s /bin/bash -G sudo,www-data deploy
         mkdir -p /home/deploy/.ssh
         ssh-keygen -t ed25519 -f /home/deploy/.ssh/id_ed25519 -N '' -C "deploy@mataroa"
-        chown -R deploy:deploy /home/deploy/.ssh
+        sudo chown -R deploy:deploy /home/deploy/.ssh
         echo 'deploy user created successfully'
     else
         echo 'deploy user already exists'
@@ -67,7 +67,7 @@ run_remote "
 
 # 4. Create /var/www directory
 echo "==> Creating /var/www directory..."
-run_remote "mkdir -p /var/www && chown deploy:www-data /var/www && chmod 755 /var/www"
+run_remote "sudo mkdir -p /var/www && sudo chown deploy:www-data /var/www && sudo chmod 755 /var/www"
 
 # 5. Setup PostgreSQL database
 echo "==> Setting up PostgreSQL database..."
@@ -104,25 +104,23 @@ echo "==> Deploying systemd configuration files..."
     cd /tmp/mataroa-deploy
 
     # Move files to destinations
-    mv mataroa.service /etc/systemd/system/
-    mv mataroa.env /etc/systemd/system/
-    chmod 640 /etc/systemd/system/mataroa.env
-    mv Caddyfile /etc/caddy/
-    mv caddy.service /etc/systemd/system/
+    sudo mv mataroa.service /etc/systemd/system/
+    sudo mv mataroa.env /etc/systemd/system/
+    sudo chmod 640 /etc/systemd/system/mataroa.env
+    sudo mv Caddyfile /etc/caddy/
+    sudo mv caddy.service /etc/systemd/system/
 
     # Move timers and services
-    mv mataroa-notifications.timer /etc/systemd/system/
-    mv mataroa-notifications.service /etc/systemd/system/
-    mv mataroa-exports.timer /etc/systemd/system/
-    mv mataroa-exports.service /etc/systemd/system/
-    mv mataroa-backup.timer /etc/systemd/system/
-    mv mataroa-backup.service /etc/systemd/system/
-    mv mataroa-dailysummary.timer /etc/systemd/system/
-    mv mataroa-dailysummary.service /etc/systemd/system/
-    mv mataroa-renewal.timer /etc/systemd/system/
-    mv mataroa-renewal.service /etc/systemd/system/
-    mv mataroa-spam-scan.timer /etc/systemd/system/
-    mv mataroa-spam-scan.service /etc/systemd/system/
+    sudo mv mataroa-notifications.timer /etc/systemd/system/
+    sudo mv mataroa-notifications.service /etc/systemd/system/
+    sudo mv mataroa-exports.timer /etc/systemd/system/
+    sudo mv mataroa-exports.service /etc/systemd/system/
+    sudo mv mataroa-backup.timer /etc/systemd/system/
+    sudo mv mataroa-backup.service /etc/systemd/system/
+    sudo mv mataroa-dailysummary.timer /etc/systemd/system/
+    sudo mv mataroa-dailysummary.service /etc/systemd/system/
+    sudo mv mataroa-renewal.timer /etc/systemd/system/
+    sudo mv mataroa-renewal.service /etc/systemd/system/
 
     # Cleanup
     cd /
@@ -150,30 +148,28 @@ run_remote "sudo -u deploy bash -c 'cd /var/www/mataroa && /home/deploy/.local/b
 # 12. Reload systemd and enable services
 echo "==> Enabling and starting systemd services..."
 run_remote "
-    systemctl daemon-reload
-    systemctl enable mataroa
-    systemctl enable caddy
-    systemctl enable mataroa-notifications.timer
-    systemctl enable mataroa-exports.timer
-    systemctl enable mataroa-backup.timer
-    systemctl enable mataroa-dailysummary.timer
-    systemctl enable mataroa-renewal.timer
-    systemctl enable mataroa-spam-scan.timer
-    systemctl start mataroa-notifications.timer
-    systemctl start mataroa-exports.timer
-    systemctl start mataroa-backup.timer
-    systemctl start mataroa-dailysummary.timer
-    systemctl start mataroa-renewal.timer
-    systemctl start mataroa-spam-scan.timer
-    systemctl start mataroa
-    systemctl start caddy
+    sudo systemctl daemon-reload
+    sudo systemctl enable mataroa
+    sudo systemctl enable caddy
+    sudo systemctl enable mataroa-notifications.timer
+    sudo systemctl enable mataroa-exports.timer
+    sudo systemctl enable mataroa-backup.timer
+    sudo systemctl enable mataroa-dailysummary.timer
+    sudo systemctl enable mataroa-renewal.timer
+    sudo systemctl start mataroa-notifications.timer
+    sudo systemctl start mataroa-exports.timer
+    sudo systemctl start mataroa-backup.timer
+    sudo systemctl start mataroa-dailysummary.timer
+    sudo systemctl start mataroa-renewal.timer
+    sudo systemctl start mataroa
+    sudo systemctl start caddy
 "
 
 # 13. Wait and restart Caddy
 echo "==> Waiting for 30 seconds before restarting Caddy..."
 run_remote "
     sleep 30
-    systemctl restart caddy
+    sudo systemctl restart caddy
 "
 
 echo ""
